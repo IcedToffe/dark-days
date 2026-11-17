@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Brain Lies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600&family=Instrument+Serif&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header>
+    <h1>Brain Lies</h1>
+    <p class="sub">Your own proof, for the days your brain lies.</p>
+  </header>
+
+  <nav>
+    <button data-v="rough" class="on">Rough day</button>
+    <button data-v="add">Add proof</button>
+    <button data-v="voices">Voices</button>
+  </nav>
+
+  <section id="rough" class="view">
+    <p>What is your mind telling you?</p>
+    <div id="chips"></div>
+    <div id="stage" class="glow" hidden>
+      <p id="meta" class="meta"></p>
+      <p id="text" class="big"></p>
+      <img id="photo" alt="Saved photo" hidden>
+      <audio id="audio" controls hidden></audio>
+      <button id="next" class="main">Show me another</button>
+    </div>
+    <p id="empty" hidden>Nothing saved yet. On a good day, open Add proof and save something here.</p>
+  </section>
+
+  <section id="add" class="view" hidden>
+    <label for="tag">This proves</label>
+    <select id="tag"></select>
+    <p id="prompt" class="meta"></p>
+    <label for="note">Write it down</label>
+    <textarea id="note" rows="4" placeholder="What happened?"></textarea>
+    <label for="pic">Photo</label>
+    <input id="pic" type="file" accept="image/*">
+    <label>Voice clip (up to 30 seconds)</label>
+    <button id="rec" type="button">Record</button> <span id="recnote" class="meta"></span>
+    <button id="save" class="main">Save proof</button>
+    <p id="status" class="meta" role="status"></p>
+  </section>
+
+  <section id="voices" class="view" hidden>
+    <p>Ask someone to leave you a note. It stays hidden until you have a rough day.</p>
+    <label for="who">Your name</label>
+    <input id="who" placeholder="Milo">
+    <button id="link" class="main">Copy link to send</button>
+    <p id="linkout" class="meta" role="status"></p>
+    <label for="code">Paste the code they send back</label>
+    <textarea id="code" rows="3"></textarea>
+    <button id="import">Save their note</button>
+    <p id="vcount" class="meta" role="status"></p>
+  </section>
+
+  <footer>Struggling right now? Call NCMH at <a href="tel:1553">1553</a> or <a href="tel:09178998727">0917-899-8727</a>. This app supports you; it doesn't replace professional care.</footer>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

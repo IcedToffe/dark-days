@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Write a note | Brain Lies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600&family=Instrument+Serif&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header>
+    <h1>Brain Lies</h1>
+    <p class="sub" id="intro"></p>
+  </header>
+
+  <label for="from">Your name</label>
+  <input id="from" placeholder="Your name">
+
+  <label for="kind">What do you want them to remember?</label>
+  <select id="kind">
+    <option value="care">That people care about them</option>
+    <option value="burden">That they are not a burden</option>
+    <option value="capable">What they are good at</option>
+    <option value="failure">That they are not a failure</option>
+    <option value="better">That things have gotten better before</option>
+  </select>
+
+  <label for="msg">Your note</label>
+  <textarea id="msg" rows="5" maxlength="1000" placeholder="Be specific. A real memory beats a general compliment."></textarea>
+
+  <button id="make" class="main">Make my code</button>
+
+  <div id="done" hidden>
+    <label for="out">Send this code back to <span id="to"></span></label>
+    <textarea id="out" rows="4" readonly></textarea>
+    <button id="copy">Copy code</button>
+    <p class="meta" id="msgout" role="status"></p>
+  </div>
+</main>
+<script>
+const to = new URLSearchParams(location.search).get('to') || 'your friend';
+document.getElementById('intro').textContent = 'Write a note for ' + to + ' to read on a hard day.';
+document.getElementById('to').textContent = to;
+document.getElementById('make').onclick = () => {
+  const text = document.getElementById('msg').value.trim();
+  if (!text) { document.getElementById('msg').focus(); return; }
+  const data = { from: document.getElementById('from').value.trim(), text, tag: document.getElementById('kind').value };
+  document.getElementById('out').value = btoa(encodeURIComponent(JSON.stringify(data)));
+  document.getElementById('done').hidden = false;
+};
+document.getElementById('copy').onclick = async () => {
+  const out = document.getElementById('out');
+  out.select();
+  try { await navigator.clipboard.writeText(out.value); document.getElementById('msgout').textContent = 'Copied. Paste it in a message to ' + to + '.'; }
+  catch { document.getElementById('msgout').textContent = 'Select the code above and copy it.'; }
+};
+</script>
+</body>
+</html>
