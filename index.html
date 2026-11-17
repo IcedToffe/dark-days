@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dark Days</title>
+<title>Brain Lies</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600&family=Instrument+Serif&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -11,7 +11,7 @@
 <body>
 <main>
   <header>
-    <h1>Dark Days</h1>
+    <h1>Brain Lies</h1>
     <p class="sub">Your own proof, for the days your brain lies.</p>
   </header>
 
@@ -19,11 +19,28 @@
     <button data-v="rough" class="on">Rough day</button>
     <button data-v="add">Add proof</button>
     <button data-v="voices">Voices</button>
+    <button data-v="plan">Safety plan</button>
+    <button data-v="calm">Calm</button>
   </nav>
 
   <section id="rough" class="view">
+    <div class="row"><button data-go="plan">Open my safety plan</button><button data-go="calm">Calming tools</button></div>
+    <div id="sev">
+      <label for="lvl">How bad is it right now? <b id="lvlv">5</b>/10</label>
+      <input id="lvl" type="range" min="1" max="10" value="5">
+      <p class="meta">1 = a little off &middot; 10 = unbearable</p>
+      <button id="sevgo" class="main">Continue</button>
+    </div>
+    <div id="urgent" class="glow" hidden>
+      <p id="urgtxt" class="big"></p>
+      <button class="main" data-crisis>Get crisis help now</button>
+      <div class="row"><button data-go="plan">Open my safety plan</button><button data-go="calm">Calming tools</button><button id="anyway">Show me proof anyway</button></div>
+    </div>
+    <p id="reason" class="meta reason" hidden></p>
+    <div id="belief" hidden>
     <p>What is your mind telling you?</p>
     <div id="chips"></div>
+    </div>
     <div id="stage" class="glow" hidden>
       <p id="meta" class="meta"></p>
       <p id="text" class="big"></p>
@@ -60,8 +77,84 @@
     <p id="vcount" class="meta" role="status"></p>
   </section>
 
-  <footer>Struggling right now? Call NCMH at <a href="tel:1553">1553</a> or <a href="tel:09178998727">0917-899-8727</a>. This app supports you; it doesn't replace professional care.</footer>
+  <section id="plan" class="view" hidden>
+    <p>Fill this in on a calm day, one step at a time. It stays on this device. Based on the Stanley-Brown Safety Planning Intervention.</p>
+    <h2>1. My warning signs</h2>
+    <textarea data-plan="warn" rows="3" aria-label="My warning signs" placeholder="Thoughts, feelings, or situations that tell me a hard time is starting"></textarea>
+    <h2>2. Things that help me</h2>
+    <textarea data-plan="help" rows="3" aria-label="Things that help me" placeholder="Music, a shower, a walk, a breathing exercise..."></textarea>
+    <h2>3. Safe places and people who distract me</h2>
+    <textarea data-plan="places" rows="3" aria-label="Safe places and people who distract me" placeholder="Where can I go to be around others, even without talking?"></textarea>
+    <h2>4. People I can ask for help</h2>
+    <p class="meta">Up to 3. Text sends: "Hi, I'm struggling right now. Can you check in on me?" Messenger copies that message, then you paste it.</p>
+    <div id="contacts"></div>
+    <h2>5. Crisis lines</h2>
+    <button data-crisis>Open crisis lines</button>
+    <h2>6. Making my space safer</h2>
+    <textarea data-plan="space" rows="3" aria-label="Making my space safer" placeholder="What could I put out of reach, or ask someone to keep for a while? Who can help me do that?"></textarea>
+    <h2>My reasons to stay</h2>
+    <p class="meta">People, pets, goals, small things. Anything that is yours.</p>
+    <ul id="rlist"></ul>
+    <label for="rin" class="sr">Add a reason</label>
+    <input id="rin" maxlength="200" placeholder="e.g. My dog, my sister, finishing school">
+    <button id="radd" type="button">Add reason</button>
+  </section>
+
+  <section id="calm" class="view" hidden>
+    <h2>Breathe</h2>
+    <div id="orb" aria-hidden="true"></div>
+    <p id="bl" class="big center">Ready when you are</p>
+    <button id="bgo" class="main">Start breathing</button>
+
+    <h2>5-4-3-2-1 grounding</h2>
+    <p id="gtxt" class="big">Bring your attention to the room around you.</p>
+    <button id="gnext">Start</button>
+
+    <h2>Wait 15 minutes</h2>
+    <p class="meta">Intense moments often pass. You only need to get through this one.</p>
+    <p id="wclock" class="big">15:00</p>
+    <p id="wmsg" class="meta" aria-live="polite"></p>
+    <button id="wgo">Start the 15 minutes</button>
+    <div id="wmore" class="row" hidden><button data-crisis class="main">Get crisis help</button><button data-go="plan">Open my safety plan</button></div>
+
+    <h2>Soothing sounds</h2>
+    <div class="row"><button id="rain">Rain</button><button id="ocean">Ocean</button><button id="sstop">Stop</button></div>
+
+    <h2>A gentle distraction</h2>
+    <p id="dtxt" class="big">Tap for one small thing to do.</p>
+    <button id="dnext">Give me one</button>
+  </section>
+
+  <footer>This app supports you; it doesn't replace professional care.</footer>
 </main>
+
+<button class="sos" data-crisis>Crisis help</button>
+
+<dialog id="crisis" aria-labelledby="ctitle">
+  <div id="lview">
+    <h2 id="ctitle">You are not alone</h2>
+    <button id="dgo" class="danger">I'm in immediate danger</button>
+    <a id="ecall" class="btn" href="#">Call emergency</a>
+    <label for="country">My country</label>
+    <select id="country"></select>
+    <div id="lines"></div>
+    <p class="meta">Numbers can change. Please verify them. More countries: <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a></p>
+  </div>
+  <div id="dview" hidden>
+    <h2>Get safe right now</h2>
+    <a id="dcall" class="btn danger" href="#">Call emergency</a>
+    <a id="dfriend" class="btn" href="#" hidden>Call my trusted person</a>
+    <ul>
+      <li>If you can't talk, stay on the line anyway.</li>
+      <li>Move to where other people are, or tell someone near you.</li>
+      <li>Put distance between you and anything you could use to hurt yourself.</li>
+      <li>Go to the nearest emergency room if you can.</li>
+      <li>Please don't be alone right now.</li>
+    </ul>
+    <button id="dback">Back to crisis lines</button>
+  </div>
+  <button id="cclose" class="main">Close</button>
+</dialog>
 <script src="app.js"></script>
 </body>
 </html>
