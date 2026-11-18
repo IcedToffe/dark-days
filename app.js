@@ -144,7 +144,7 @@ async function countVoices(msg) {
 
 // ===== Safety + calming features =====
 const LS = 'brainlies2';
-let S = { plan: {}, contacts: [{}, {}, {}], reasons: [], country: 'PH' };
+let S = { plan: {}, contacts: [{}, {}, {}], reasons: [], country: 'PH', log: [] };
 try { Object.assign(S, JSON.parse(localStorage.getItem(LS) || '{}')); } catch {}
 while (S.contacts.length < 3) S.contacts.push({});
 const keep = () => { try { localStorage.setItem(LS, JSON.stringify(S)); } catch {} };
@@ -155,6 +155,7 @@ function go(v) {
   document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x.dataset.v === v));
   document.querySelectorAll('.view').forEach(x => x.hidden = x.id !== v);
   if (v === 'voices') countVoices();
+  if (v === 'data') drawHist();
   window.scrollTo(0, 0);
 }
 document.addEventListener('click', e => {
@@ -167,6 +168,7 @@ document.addEventListener('click', e => {
 $('lvl').oninput = () => $('lvlv').textContent = $('lvl').value;
 $('sevgo').onclick = () => {
   const n = +$('lvl').value, hi = n >= 7;
+  S.log.push({ t: Date.now(), n }); S.log = S.log.slice(-60); keep();
   $('urgent').hidden = !hi;
   $('belief').hidden = hi;
   $('stage').hidden = true; $('empty').hidden = true;
@@ -357,3 +359,39 @@ $('sstop').onclick = stopSound;
 // --- Gentle distraction ---
 const D = ['Count backward from 100 by 3s, slowly.', 'Name an animal for each letter of the alphabet.', 'Pick a colour and find five things that colour around you.', 'Describe a meal you love in as much detail as you can.', 'Press your feet into the floor and notice how it feels.', 'Think of a place you have felt calm. What can you see there?', 'Trace slow circles in the air with one finger, then the other.'];
 $('dnext').onclick = () => { $('dtxt').textContent = rand(D.filter(x => x !== $('dtxt').textContent)); };
+
+// ===== My data: history, backup, restore, delete =====
+function drawHist() {
+  const l = S.log.slice(-14);
+  $('hist').innerHTML = l.map(x => `<i style="height:${x.n * 10}%" title="${x.n}/10 on ${new Date(x.t).toLocaleDateString()}"></i>`).join('');
+  $('histsum').textContent = l.length ? 'Last ' + l.length + ' check-ins, average ' + (l.reduce((a, x) => a + x.n, 0) / l.length).toFixed(1) + '/10. A taller bar means a harder moment.' : 'No check-ins yet.';
+}
+const b64 = b => b ? new Promise(ok => { const r = new FileReader(); r.onload = () => ok(r.result); r.readAsDataURL(b); }) : null;
+const unb64 = async u => u ? await (await fetch(u)).blob() : null;
+$('exp').onclick = async () => {
+  const items = await Promise.all((await all()).map(async i => ({ ...i, photo: await b64(i.photo), voice: await b64(i.voice) })));
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify({ v: 1, S, items })], { type: 'application/json' }));
+  a.download = 'dark-days-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+  $('bres').textContent = 'Backup downloaded. Keep it somewhere private.';
+};
+$('imp').onchange = async e => {
+  try {
+    const d = JSON.parse(await e.target.files[0].text());
+    if (!d.S || !Array.isArray(d.items)) throw 0;
+    Object.assign(S, d.S); keep();
+    for (const i of d.items) await put({ ...i, photo: await unb64(i.photo), voice: await unb64(i.voice) });
+    $('bres').textContent = 'Restored. Reloading...';
+    setTimeout(() => location.reload(), 800);
+  } catch { $('bres').textContent = "That file didn't work."; }
+};
+$('wipe').onclick = async () => {
+  if (!confirm('Delete everything saved in this app on this device? This cannot be undone.')) return;
+  try { localStorage.removeItem(LS); } catch {}
+  await tx('readwrite', s => s.clear());
+  location.reload();
+};
+
+// --- Installable + offline (PWA) ---
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
