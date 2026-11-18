@@ -45,3 +45,6 @@ input[type=range]{padding:0;accent-color:var(--lamp)}
 #plan ul,#dview ul{padding-left:20px}
 #rlist li{margin:6px 0}
 #orb{width:140px;height:140px;margin:20px auto;border-radius:50%;background:radial-gradient(circle,var(--sea),rgba(127,214,194,.25));box-shadow:0 0 40px rgba(127,214,194,.35)}
+
+#hist{display:flex;align-items:flex-end;gap:4px;height:100px;border-bottom:1px solid #33406A}
+#hist i{flex:1;background:var(--lamp);border-radius:4px 4px 0 0;min-height:4px}
