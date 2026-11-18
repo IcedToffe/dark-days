@@ -11,14 +11,21 @@ No server, no accounts, no tracking. Everything is saved in the browser on your 
 - Safety plan: based on the Stanley-Brown Safety Planning Intervention.
 - Trusted contacts: Text, Call, or Messenger with a prefilled message.
 - Reasons to stay.
+- My data: check-in history, backup, restore, delete everything.
+- Installable and works offline (PWA).
 - Crisis help: always-visible button, hotlines by country, "I'm in immediate danger" screen.
 - Calm: guided breathing (respects reduced motion), 5-4-3-2-1 grounding, 15-minute wait timer, rain and ocean sounds, gentle distractions.
+
+## Capstone documentation
+See `docs/CAPSTONE.md` (problem, objectives, framework, architecture diagrams, requirements, data dictionary, test cases, evaluation plan, ethics).
 
 ## Files
 - `index.html`: the app
 - `style.css`: styles
 - `app.js`: all the logic
 - `write.html`: the page friends open to write you a note
+- `manifest.json`, `sw.js`, `icon-*.png`: make it installable and usable offline (bump `V` in `sw.js` whenever you change files)
+- `docs/CAPSTONE.md`: capstone documentation
 
 ## Run it locally
 Open the folder in VS Code, install the "Live Server" extension, right-click `index.html` and choose "Open with Live Server". Or run `python3 -m http.server 8000` in the folder and visit http://localhost:8000.
