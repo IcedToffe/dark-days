@@ -6,6 +6,9 @@
 <title>Brain Lies</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600&family=Instrument+Serif&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#141B2D">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -21,6 +24,7 @@
     <button data-v="voices">Voices</button>
     <button data-v="plan">Safety plan</button>
     <button data-v="calm">Calm</button>
+    <button data-v="data">My data</button>
   </nav>
 
   <section id="rough" class="view">
@@ -123,6 +127,21 @@
     <h2>A gentle distraction</h2>
     <p id="dtxt" class="big">Tap for one small thing to do.</p>
     <button id="dnext">Give me one</button>
+  </section>
+
+  <section id="data" class="view" hidden>
+    <h2>Check-in history</h2>
+    <p class="meta">Your last ratings from the Rough day screen. For you only. This is not a diagnosis.</p>
+    <div id="hist" role="img" aria-label="Bar chart of your recent check-ins"></div>
+    <p id="histsum" class="meta"></p>
+    <h2>Backup</h2>
+    <p class="meta">Everything is saved only on this device. Download a backup so you never lose it.</p>
+    <button id="exp">Download backup</button>
+    <label for="imp">Restore from a backup file</label>
+    <input id="imp" type="file" accept="application/json">
+    <p id="bres" class="meta" role="status"></p>
+    <h2>Delete everything</h2>
+    <button id="wipe" class="danger">Delete all my data</button>
   </section>
 
   <footer>This app supports you; it doesn't replace professional care.</footer>
